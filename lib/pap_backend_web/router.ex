@@ -7,5 +7,7 @@ defmodule PAPBackendWeb.Router do
 
   scope "/api", PAPBackendWeb do
     pipe_through :api
+
+    resources "/locations", LocationController, only: [:create, :show]
   end
 end
