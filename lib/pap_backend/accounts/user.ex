@@ -26,4 +26,6 @@ defmodule PAPBackend.Accounts.User do
   defp hash_user_password(changeset) do
     changeset
   end
+
+
 end

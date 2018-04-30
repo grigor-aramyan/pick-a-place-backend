@@ -3,6 +3,7 @@ defmodule PAPBackendWeb.UserController do
 
   alias PAPBackend.Accounts
   alias PAPBackend.Accounts.User
+  alias PAPBackend.Auth
 
   action_fallback PAPBackendWeb.FallbackController
 
@@ -37,6 +38,20 @@ defmodule PAPBackendWeb.UserController do
     user = Accounts.get_user!(id)
     with {:ok, %User{}} <- Accounts.delete_user(user) do
       send_resp(conn, :no_content, "")
+    end
+  end
+
+  def sign_in(conn, %{"email" => email, "password" => password}) do
+    case Auth.authenticate_user(email, password) do
+      {:ok, user} ->
+        conn
+        |> put_status(:ok)
+        |> render(PAPBackendWeb.UserView, "sign_in.json", user: user)
+
+      {:error, message} ->
+        conn
+        |> put_status(:unauthorized)
+        |> render(PAPBackendWeb.ErrorView, "401.json", message: message)
     end
   end
 end
