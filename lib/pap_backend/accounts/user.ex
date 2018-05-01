@@ -2,10 +2,12 @@ defmodule PAPBackend.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias PAPBackend.Places.Location
 
   schema "users" do
     field :email, :string
     field :password, :string
+    has_many :locations, Location
 
     timestamps()
   end
