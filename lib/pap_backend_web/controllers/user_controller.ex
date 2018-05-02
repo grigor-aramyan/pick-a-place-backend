@@ -1,6 +1,8 @@
 defmodule PAPBackendWeb.UserController do
   use PAPBackendWeb, :controller
 
+  alias PAPBackend.Repo
+
   alias PAPBackend.Accounts
   alias PAPBackend.Accounts.User
   alias PAPBackend.Auth
@@ -55,5 +57,15 @@ defmodule PAPBackendWeb.UserController do
         |> put_status(:unauthorized)
         |> render(PAPBackendWeb.ErrorView, "401.json", message: message)
     end
+  end
+
+  def sign_out(conn, _params) do
+    current_user_id = get_session(conn, :current_user_id)
+    user = Repo.get!(User, current_user_id)
+
+    conn
+    |> delete_session(:current_user_id)
+    |> put_status(:ok)
+    |> render(PAPBackendWeb.UserView, "sign_out.json", user: user)
   end
 end

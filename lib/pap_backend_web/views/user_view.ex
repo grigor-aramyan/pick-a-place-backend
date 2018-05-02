@@ -20,4 +20,9 @@ defmodule PAPBackendWeb.UserView do
     %{user:
       %{id: user.id, email: user.email}}}
   end
+
+  def render("sign_out.json", %{user: user}) do
+    %{data:
+      %{email: user.email, msg: "Signed out"}}
+  end
 end

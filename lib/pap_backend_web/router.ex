@@ -6,6 +6,10 @@ defmodule PAPBackendWeb.Router do
     plug :fetch_session
   end
 
+  pipeline :api_auth do
+    plug :ensure_authenticated
+  end
+
   scope "/api", PAPBackendWeb do
     pipe_through :api
 
@@ -13,5 +17,24 @@ defmodule PAPBackendWeb.Router do
     resources "/users", UserController, only: [:create, :show]
 
     post "/users/sign_in", UserController, :sign_in
+  end
+
+  scope "/api", PAPBackendWeb do
+    pipe_through [:api, :api_auth]
+
+    post "/users/sign_out", UserController, :sign_out
+  end
+
+  defp ensure_authenticated(conn, _opts) do
+    current_user_id = get_session(conn, :current_user_id)
+
+    if current_user_id do
+      conn
+    else
+      conn
+      |> put_status(:unauthorized)
+      |> render(PAPBackendWeb.ErrorView, "401.json", message: "Unauthenticated user")
+      |> halt()
+    end
   end
 end
