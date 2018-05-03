@@ -3,6 +3,7 @@ defmodule PAPBackendWeb.LocationController do
 
   alias PAPBackend.Places
   alias PAPBackend.Places.Location
+  alias PAPBackend.Repo
 
   action_fallback PAPBackendWeb.FallbackController
 
@@ -45,5 +46,19 @@ defmodule PAPBackendWeb.LocationController do
     with {:ok, %Location{}} <- Places.delete_location(location) do
       send_resp(conn, :no_content, "")
     end
+  end
+
+  def get_location(conn, %{"code" => code}) do
+    location = Repo.get_by(Location, code: code)
+
+    if location do
+      render(conn, "show.json", location: location)
+    else
+      render(conn, PAPBackendWeb.ErrorView, "401.json", message: "Non-existent code")
+    end
+  end
+
+  def get_location(conn, _params) do
+    render(conn, PAPBackendWeb.ErrorView, "401.json", message: "Non-existent code")
   end
 end

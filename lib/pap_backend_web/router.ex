@@ -17,6 +17,7 @@ defmodule PAPBackendWeb.Router do
     resources "/users", UserController, only: [:create, :show]
 
     post "/users/sign_in", UserController, :sign_in
+    post "/locations/get_location", LocationController, :get_location
   end
 
   scope "/api", PAPBackendWeb do
