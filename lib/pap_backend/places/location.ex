@@ -8,6 +8,7 @@ defmodule PAPBackend.Places.Location do
     field :code, :string
     field :latitude, :string
     field :longitude, :string
+    field :message, :string
     belongs_to :user, User
 
     timestamps()
@@ -16,7 +17,7 @@ defmodule PAPBackend.Places.Location do
   @doc false
   def changeset(location, attrs) do
     location
-    |> cast(attrs, [:code, :latitude, :longitude, :user_id])
+    |> cast(attrs, [:code, :latitude, :longitude, :message, :user_id])
     |> validate_required([:code, :latitude, :longitude])
   end
 end
