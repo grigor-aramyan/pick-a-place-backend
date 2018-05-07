@@ -3,6 +3,7 @@ defmodule PAPBackendWeb.UserSocket do
 
   ## Channels
   # channel "room:*", PAPBackendWeb.RoomChannel
+  channel "live_tracking:general", PAPBackendWeb.LiveTrackingChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
