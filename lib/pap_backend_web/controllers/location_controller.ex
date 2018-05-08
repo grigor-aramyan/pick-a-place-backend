@@ -1,6 +1,8 @@
 defmodule PAPBackendWeb.LocationController do
   use PAPBackendWeb, :controller
 
+  import Ecto.Query, only: [from: 2]
+
   alias PAPBackend.Places
   alias PAPBackend.Places.Location
   alias PAPBackend.Repo
@@ -46,6 +48,24 @@ defmodule PAPBackendWeb.LocationController do
     with {:ok, %Location{}} <- Places.delete_location(location) do
       send_resp(conn, :no_content, "")
     end
+  end
+
+  def get_live_location(conn, %{"code" => code}) do
+    query = from l in "locations",
+            where: l.code == ^code and l.live == true,
+            select: l.id
+    id_list = Repo.all(query)
+    [ first_id | rest ] = id_list
+
+    location = Repo.get(Location, first_id)
+    if location do
+      render(conn, "show.json", location: location)
+    else
+      render(conn, PAPBackendWeb.ErrorView, "401.json", message: "Non-existent code")
+    end
+  end
+  def get_live_location(conn, _params) do
+    render(conn, PAPBackendWeb.ErrorView, "401.json", message: "Non-existent code")
   end
 
   def get_location(conn, %{"code" => code}) do

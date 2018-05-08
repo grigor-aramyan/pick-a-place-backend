@@ -9,6 +9,7 @@ defmodule PAPBackend.Places.Location do
     field :latitude, :string
     field :longitude, :string
     field :message, :string
+    field :live, :boolean
     belongs_to :user, User
 
     timestamps()
