@@ -55,7 +55,7 @@ defmodule PAPBackendWeb.LocationController do
             where: l.code == ^code and l.live == true,
             select: l.id
     id_list = Repo.all(query)
-    [ first_id | rest ] = id_list
+    [ first_id | _rest ] = id_list
 
     location = Repo.get(Location, first_id)
     if location do
