@@ -50,6 +50,23 @@ defmodule PAPBackendWeb.LocationController do
     end
   end
 
+  def create_live_anonymous(conn, %{"location" => location_params}) do
+    code =
+      :crypto.strong_rand_bytes(24)
+      |> Base.url_encode64
+      |> binary_part(0, 8)
+
+    location_params_extended = Map.put(location_params, "code", code)
+    location_params_extended = Map.put(location_params_extended, "live", true)
+
+    with {:ok, %Location{} = location} <- Places.create_location(location_params_extended) do
+      conn
+      |> put_status(:created)
+      |> put_resp_header("location", location_path(conn, :show, location))
+      |> render("show.json", location: location)
+    end
+  end
+
   def get_live_location(conn, %{"code" => code}) do
     query = from l in "locations",
             where: l.code == ^code and l.live == true,

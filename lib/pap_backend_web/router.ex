@@ -18,6 +18,8 @@ defmodule PAPBackendWeb.Router do
 
     post "/users/sign_in", UserController, :sign_in
     post "/locations/get_location", LocationController, :get_location
+    post "/locations/get_live_location", LocationController, :get_live_location
+    post "/locations/live", LocationController, :create_live_anonymous
   end
 
   scope "/api", PAPBackendWeb do
