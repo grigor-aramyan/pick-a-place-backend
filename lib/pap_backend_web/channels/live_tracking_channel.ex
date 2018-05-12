@@ -1,6 +1,7 @@
 defmodule PAPBackendWeb.LiveTrackingChannel do
   use PAPBackendWeb, :channel
 
+  alias PAPBackend.Places
   alias PAPBackend.Places.Location
   alias Ecto.Changeset
   alias PAPBackend.Repo
@@ -28,6 +29,26 @@ defmodule PAPBackendWeb.LiveTrackingChannel do
       {:error, _changeset} ->
         push socket, "live_tracking:update_live_location", %{
           error: "error updating data"
+        }
+    end
+
+    {:reply, :ok, socket}
+  end
+
+  def handle_in("live_tracking:delete_live_location", params, socket) do
+    code = params["code"]
+
+    location = Repo.get_by!(Location, code: code)
+    case Places.delete_location(location) do
+      {:ok, _location} ->
+        broadcast socket, "live_tracking:delete_live_location", %{
+          code: code,
+          msg: "Record deleted"
+        }
+      {:error, _changeset} ->
+        broadcast socket, "live_tracking:delete_live_location", %{
+          code: code,
+          error: "Error deleting record"
         }
     end
 
