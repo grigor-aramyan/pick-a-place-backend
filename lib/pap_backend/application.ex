@@ -14,6 +14,7 @@ defmodule PAPBackend.Application do
       supervisor(PAPBackendWeb.Endpoint, []),
       # Start your own worker by calling: PAPBackend.Worker.start_link(arg1, arg2, arg3)
       # worker(PAPBackend.Worker, [arg1, arg2, arg3]),
+      worker(PAPBackend.Workers.RecordCleaningScheduler, []),
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

@@ -20,7 +20,7 @@ defmodule PAPBackend.Mixfile do
   def application do
     [
       mod: {PAPBackend.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :timex]
     ]
   end
 
@@ -39,7 +39,8 @@ defmodule PAPBackend.Mixfile do
       {:postgrex, ">= 0.0.0"},
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
-      {:bcrypt_elixir, "~> 0.12"}
+      {:bcrypt_elixir, "~> 0.12"},
+      {:timex, "~> 3.3"}
     ]
   end
 
