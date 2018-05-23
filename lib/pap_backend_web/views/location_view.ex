@@ -15,6 +15,7 @@ defmodule PAPBackendWeb.LocationView do
       code: location.code,
       latitude: location.latitude,
       longitude: location.longitude,
-      message: location.message}
+      message: location.message,
+      live: location.live}
   end
 end

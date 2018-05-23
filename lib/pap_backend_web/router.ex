@@ -26,6 +26,7 @@ defmodule PAPBackendWeb.Router do
     pipe_through [:api, :api_auth]
 
     post "/users/sign_out", UserController, :sign_out
+    post "/locations/get_locations_by_user_id", LocationController, :get_locations_by_user_id
   end
 
   defp ensure_authenticated(conn, _opts) do

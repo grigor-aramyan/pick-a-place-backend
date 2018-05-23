@@ -101,4 +101,21 @@ defmodule PAPBackend.Places do
   def change_location(%Location{} = location) do
     Location.changeset(location, %{})
   end
+
+  def get_locations_by_user_id(user_id) do
+    query = from l in "locations",
+      where: l.user_id == ^user_id,
+      select: [l.id, l.code, l.longitude, l.latitude, l.message, l.live]
+
+      list_of_lists = Repo.all(query)
+      turn_map(list_of_lists)
+  end
+
+  defp turn_map([]) do
+    []
+  end
+  defp turn_map([head | tail]) do
+    [ %Location{id: Enum.at(head, 0), code: Enum.at(head, 1), longitude: Enum.at(head, 2), latitude: Enum.at(head, 3),
+      message: Enum.at(head, 4), live: Enum.at(head, 5)} ] ++ turn_map(tail)
+  end
 end

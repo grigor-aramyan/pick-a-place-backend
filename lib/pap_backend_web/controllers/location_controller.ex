@@ -98,4 +98,9 @@ defmodule PAPBackendWeb.LocationController do
   def get_location(conn, _params) do
     render(conn, PAPBackendWeb.ErrorView, "401.json", message: "Non-existent code")
   end
+
+  def get_locations_by_user_id(conn, %{"user_id" => user_id}) do
+    locations = Places.get_locations_by_user_id(user_id)
+    render(conn, "index.json", locations: locations)
+  end
 end
