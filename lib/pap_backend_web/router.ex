@@ -14,7 +14,7 @@ defmodule PAPBackendWeb.Router do
     pipe_through :api
 
     resources "/locations", LocationController, only: [:create, :show]
-    resources "/users", UserController, only: [:create, :show]
+    resources "/users", UserController, only: [:create]
 
     post "/users/sign_in", UserController, :sign_in
     post "/locations/get_location", LocationController, :get_location
@@ -25,6 +25,7 @@ defmodule PAPBackendWeb.Router do
   scope "/api", PAPBackendWeb do
     pipe_through [:api, :api_auth]
 
+    resources "/users", UserController, only: [:show]
     post "/users/sign_out", UserController, :sign_out
     post "/locations/get_locations_by_user_id", LocationController, :get_locations_by_user_id
   end

@@ -17,6 +17,7 @@ defmodule PAPBackendWeb.UserController do
   def create(conn, %{"user" => user_params}) do
     with {:ok, %User{} = user} <- Accounts.create_user(user_params) do
       conn
+      |> put_session(:current_user_id, user.id)
       |> put_status(:created)
       |> put_resp_header("user", user_path(conn, :show, user))
       |> render("show.json", user: user)
@@ -24,8 +25,16 @@ defmodule PAPBackendWeb.UserController do
   end
 
   def show(conn, %{"id" => id}) do
-    user = Accounts.get_user!(id)
-    render(conn, "show.json", user: user)
+    current_user_id = get_session(conn, :current_user_id)
+
+    case id == (Integer.to_string current_user_id) do
+      true ->
+        user = Accounts.get_user!(id)
+        render(conn, "show.json", user: user)
+      false ->
+        render(conn, PAPBackendWeb.ErrorView, "401.json", message: "Unauthorized access")
+    end
+
   end
 
   def update(conn, %{"id" => id, "user" => user_params}) do
